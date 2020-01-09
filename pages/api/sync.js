@@ -24,11 +24,24 @@ async function handler(req, res) {
   const user = await faunaClient.query(
     q.Get(q.Match(q.Index("users_by_spotify_id"), userID))
   );
-  const accessToken = (
-    await oauth2.accessToken
-      .create({ refresh_token: user.data.spotifyRefreshToken })
-      .refresh()
-  ).token.access_token;
+  let accessToken = await axios({
+    method: "post",
+    url: "https://accounts.spotify.com/api/token",
+    headers: {
+      Authorization:
+        "Basic " +
+        Buffer.from(
+          credentials.client.id + ":" + credentials.client.secret
+        ).toString("base64"),
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    params: {
+      grant_type: "refresh_token",
+      refresh_token: user.data.spotifyRefreshToken
+    }
+  }).catch(error => console.log(error));
+  accessToken = accessToken.data.access_token;
+  console.log(accessToken);
   let songs = [];
   let response = {
     data: {
@@ -43,21 +56,23 @@ async function handler(req, res) {
         Authorization: "Bearer " + accessToken,
         "Content-Type": "application/json"
       }
-    });
+    }).catch(error => console.log(error));
     for (let song of response.data.items) {
       songs.push(song.track.id);
     }
   }
 
-  let deleted = await faunaClient.query(
-    q.Difference(
-      q.Select(
-        ["data", "songs"],
-        q.Get(q.Match(q.Index("users_by_spotify_id"), userID))
-      ),
-      songs
+  let deleted = await faunaClient
+    .query(
+      q.Difference(
+        q.Select(
+          ["data", "songs"],
+          q.Get(q.Match(q.Index("users_by_spotify_id"), userID))
+        ),
+        songs
+      )
     )
-  );
+    .catch(error => console.log(error));
   let added = await faunaClient.query(
     q.Difference(
       songs,
