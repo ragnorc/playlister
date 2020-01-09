@@ -34,7 +34,8 @@ const handler = (req, res) => {
       "user-read-private",
       "user-read-email",
       "playlist-modify-private",
-      "user-library-modify"
+      "user-library-modify",
+      "user-library-read"
     ],
     state
   });
