@@ -18,7 +18,7 @@ async function handler(req, res) {
   };
   const oauth2 = require("simple-oauth2").create(credentials);
   const faunaClient = new faunadb.Client({
-    secret: "fnADhbbOviACACi7bVE0Qweqlx8RP_a2aPYoaZjD"
+    secret: process.env.FAUNA_KEY
   });
 
   const user = await faunaClient.query(
