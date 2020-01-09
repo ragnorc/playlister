@@ -100,7 +100,7 @@ async function handler(req, res) {
     "Sync completed. User liked " +
       added.length +
       " songs and unliked " +
-      added.length +
+      deleted.length +
       " songs."
   );
 }
