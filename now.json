@@ -1,6 +1,7 @@
 {
   "version": 2,
   "env": {
-    "FAUNA_KEY": "@fauna-key"
+    "FAUNA_KEY": "@fauna-key",
+    "SPOTIFY_CLIENT_SECRET": "@spotify-client-secret"
   }
 }

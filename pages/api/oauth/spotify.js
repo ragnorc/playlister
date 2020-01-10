@@ -4,7 +4,7 @@ const handler = (req, res) => {
   const credentials = {
     client: {
       id: "3f149ab9e98b404681c23c5ac0557bba",
-      secret: "731e1f5f35d145a88b88a5805ef599fb"
+      secret: process.env.SPOTIFY_CLIENT_SECRET
     },
     auth: {
       tokenHost: "https://accounts.spotify.com/api/",
@@ -12,6 +12,7 @@ const handler = (req, res) => {
       authorizePath: "https://accounts.spotify.com/authorize"
     }
   };
+  console.log(process.env.SPOTIFY_CLIENT_SECRET);
   const oauth2 = require("simple-oauth2").create(credentials);
   const crypto = require("crypto");
   // Generate a random state verification cookie.
