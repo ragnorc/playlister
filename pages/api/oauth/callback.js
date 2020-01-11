@@ -106,7 +106,8 @@ function findOrCreateUserRef(index, user) {
             data: {
               spotifyID: user.id,
               name: user.display_name || "",
-              spotifyRefreshToken: user.refreshToken
+              spotifyRefreshToken: user.refreshToken,
+              songs: []
             }
           })
         )
